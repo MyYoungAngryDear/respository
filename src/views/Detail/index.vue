@@ -116,9 +116,10 @@ onMounted(()=>getGoods())
             <!-- 24热榜+专题推荐 -->
             <div class="goods-aside">
               <!-- 24小时 -->
-              <DetailHot/>    
+              <!-- 加:说明后面是一个变量或者表达式 不加:后面是对应的字符串自变量 -->
+              <DetailHot :hotType="1"/>    
               <!-- 周 -->
-              <DetailHot/>              
+              <DetailHot :hotType="2"/>              
             </div>
           </div>
         </div>

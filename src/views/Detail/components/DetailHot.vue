@@ -4,8 +4,24 @@
 // 2.调用接口渲染模板
 import {getHotGoodsAPI} from '@/apis/detail'
 import {onMounted, ref} from 'vue'
+import {computed} from 'vue'
 // 获取路由方法
 import {useRoute} from 'vue-router'
+
+// 设计props参数 适配不同的title和数据
+const props = defineProps({
+    hotType:{
+        type:Number
+    }
+})
+// 适配title 1-24小时 2-周热榜
+const TYPEMAP = {
+    1:'24小时热榜',
+    2:'周热榜'
+}
+const title = computed(()=>TYPEMAP[props.hotType])
+
+
 // 定义一个响应式的对象数据 并且是一个空数组
 const hotList = ref([])
 // 调方法得到route实例
@@ -16,7 +32,7 @@ const getHotList = async ()=>{
     const res = await getHotGoodsAPI({
         // 当前的路由项  商品id
         id:route.params.id,
-        type:1
+        type:props.hotType
     })
     // 数据拿到后交给、、
     hotList.value = res.result
@@ -29,7 +45,7 @@ const getHotList = async ()=>{
 
 <template>
   <div class="goods-hot">
-    <h3>周日榜单</h3>
+    <h3>{{title}}</h3>
     <!-- 商品区块 -->
     <RouterLink to="/" class="goods-item" v-for="item in hotList" :key="item.id">
       <img :src="item.picture" alt="" />
