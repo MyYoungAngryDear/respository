@@ -1,20 +1,20 @@
 <script setup>
-import {getCheckInfoAPI} from '@/apis/checkout'
-import {onMounted, ref} from 'vue'
-const checkInfo = ref({})  // 订单对象
-const curAddress = ref({})
-const getCheckInfo = async()=>{
-    const res = await getCheckInfoAPI()
-    checkInfo.value = res.result
-    // 适配默认地址
-    // 从地址列表中筛选出来 isDefault === 0 那一项
-    const item = checkInfo.value.userAddress.find(item=>item.isDefault === 0)
-    curAddress.value = item
-}
-onMounted(()=>getCheckInfo())
+import { getCheckInfoAPI } from "@/apis/checkout";
+import { onMounted, ref } from "vue";
+const checkInfo = ref({}); // 订单对象
+const curAddress = ref({});
+const getCheckInfo = async () => {
+  const res = await getCheckInfoAPI();
+  checkInfo.value = res.result;
+  // 适配默认地址
+  // 从地址列表中筛选出来 isDefault === 0 那一项
+  const item = checkInfo.value.userAddress.find((item) => item.isDefault === 0);
+  curAddress.value = item;
+};
+onMounted(() => getCheckInfo());
 
-
-
+// 控制弹窗打开
+const showDialog = ref(false)
 </script>
 
 <template>
@@ -26,16 +26,27 @@ onMounted(()=>getCheckInfo())
         <div class="box-body">
           <div class="address">
             <div class="text">
-              <div class="none" v-if="!curAddress">您需要先添加收货地址才可提交订单。</div>
+              <div class="none" v-if="!curAddress">
+                您需要先添加收货地址才可提交订单。
+              </div>
               <ul v-else>
-                <li><span>收<i />货<i />人：</span>{{ curAddress.receiver }}</li>
+                <li>
+                  <span>收<i />货<i />人：</span>{{ curAddress.receiver }}
+                </li>
                 <li><span>联系方式：</span>{{ curAddress.contact }}</li>
-                <li><span>收货地址：</span>{{ curAddress.fullLocation }} {{ curAddress.address }}</li>
+                <li>
+                  <span>收货地址：</span>{{ curAddress.fullLocation }}
+                  {{ curAddress.address }}
+                </li>
               </ul>
             </div>
             <div class="action">
-              <el-button size="large" @click="toggleFlag = true">切换地址</el-button>
-              <el-button size="large" @click="addFlag = true">添加地址</el-button>
+              <el-button size="large" @click="showDialog = true"
+                >切换地址</el-button
+              >
+              <el-button size="large" @click="addFlag = true"
+                >添加地址</el-button
+              >
             </div>
           </div>
         </div>
@@ -56,7 +67,7 @@ onMounted(()=>getCheckInfo())
               <tr v-for="i in checkInfo.goods" :key="i.id">
                 <td>
                   <a href="javascript:;" class="info">
-                    <img :src="i.picture" alt="">
+                    <img :src="i.picture" alt="" />
                     <div class="right">
                       <p>{{ i.name }}</p>
                       <p>{{ i.attrsText }}</p>
@@ -74,7 +85,9 @@ onMounted(()=>getCheckInfo())
         <!-- 配送时间 -->
         <h3 class="box-title">配送时间</h3>
         <div class="box-body">
-          <a class="my-btn active" href="javascript:;">不限送货时间：周一至周日</a>
+          <a class="my-btn active" href="javascript:;"
+            >不限送货时间：周一至周日</a
+          >
           <a class="my-btn" href="javascript:;">工作日送货：周一至周五</a>
           <a class="my-btn" href="javascript:;">双休日、假日送货：周六至周日</a>
         </div>
@@ -83,7 +96,7 @@ onMounted(()=>getCheckInfo())
         <div class="box-body">
           <a class="my-btn active" href="javascript:;">在线支付</a>
           <a class="my-btn" href="javascript:;">货到付款</a>
-          <span style="color:#999">货到付款需付5元手续费</span>
+          <span style="color: #999">货到付款需付5元手续费</span>
         </div>
         <!-- 金额明细 -->
         <h3 class="box-title">金额明细</h3>
@@ -103,18 +116,43 @@ onMounted(()=>getCheckInfo())
             </dl>
             <dl>
               <dt>应付总额：</dt>
-              <dd class="price">{{ checkInfo.summary?.totalPayPrice.toFixed(2) }}</dd>
+              <dd class="price">
+                {{ checkInfo.summary?.totalPayPrice.toFixed(2) }}
+              </dd>
             </dl>
           </div>
         </div>
         <!-- 提交订单 -->
         <div class="submit">
-          <el-button type="primary" size="large" >提交订单</el-button>
+          <el-button type="primary" size="large">提交订单</el-button>
         </div>
       </div>
     </div>
   </div>
   <!-- 切换地址 -->
+  <el-dialog v-model="showDialog" title="切换收货地址" width="30%" center>
+    <div class="addressWrapper">
+      <div
+        class="text item"
+        v-for="item in checkInfo.userAddresses"
+        :key="item.id"
+      >
+        <ul>
+          <li>
+            <span>收<i />货<i />人：</span>{{ item.receiver }}
+          </li>
+          <li><span>联系方式：</span>{{ item.contact }}</li>
+          <li><span>收货地址：</span>{{ item.fullLocation + item.address }}</li>
+        </ul>
+      </div>
+    </div>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button>取消</el-button>
+        <el-button type="primary">确定</el-button>
+      </span>
+    </template>
+  </el-dialog>
   <!-- 添加地址 -->
 </template>
 
@@ -158,7 +196,7 @@ onMounted(()=>getCheckInfo())
       width: 100%;
     }
 
-    >ul {
+    > ul {
       flex: 1;
       padding: 20px;
 
@@ -169,7 +207,7 @@ onMounted(()=>getCheckInfo())
           color: #999;
           margin-right: 5px;
 
-          >i {
+          > i {
             width: 0.5em;
             display: inline-block;
           }
@@ -177,7 +215,7 @@ onMounted(()=>getCheckInfo())
       }
     }
 
-    >a {
+    > a {
       color: $xtxColor;
       width: 160px;
       text-align: center;
@@ -323,7 +361,7 @@ onMounted(()=>getCheckInfo())
       background: lighten($xtxColor, 50%);
     }
 
-    >ul {
+    > ul {
       padding: 10px;
       font-size: 14px;
       line-height: 30px;
