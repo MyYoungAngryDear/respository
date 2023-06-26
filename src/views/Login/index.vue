@@ -7,7 +7,7 @@ import 'element-plus/theme-chalk/el-message.css'
 // 带r是调方法 不带r是获取参数
 import {useRouter} from 'vue-router'
 
-import {useUserStore} from '@/stores/user'
+import {useUserStore} from '@/stores/userStore'
 const userStore = useUserStore()
 
 // 1.准备表单对象

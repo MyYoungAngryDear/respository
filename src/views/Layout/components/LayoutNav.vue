@@ -1,5 +1,5 @@
 <script setup>
-import {useUserStore} from '@/stores/user'
+import {useUserStore} from '@/stores/userStore'
 import {useRouter} from 'vue-router'
 const userStore = useUserStore()
 const router =useRouter()
@@ -18,7 +18,7 @@ const confirm = ()=>{
     <div class="container">
       <ul>
         <!-- 多模板渲染 区分登录状态和非登陆状态 -->
-        <!-- 适配思路：登录时显示第一块，非登录时显示第二块 是否有token -->
+        <!-- 适配思路：登录时显示第一块，非登录时显示第二块 关键是是否有token -->
         <template v-if="userStore.userInfo.token">
           <li><a href="javascript:;"><i class="iconfont icon-user"></i>{{userStore.userInfo.account}}</a></li>
           <li>
