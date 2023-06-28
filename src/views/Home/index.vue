@@ -23,7 +23,6 @@ import HomePanel from './components/HomePanel.vue'
   </HomePanel>
   <HomePanel title="人气推荐" sub-title="人气推荐 好多商品">
     <div>
-        heheeh
     </div>
   </HomePanel>
 </template>
