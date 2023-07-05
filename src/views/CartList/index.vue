@@ -46,7 +46,7 @@ const allCheck = (selected)=>{
                     ><img :src="i.picture" alt=""
                   /></RouterLink>
                   <div>
-                    <p class="name ellipsis">
+                    <p class=" ellipsis">
                       {{ i.name }}
                     </p>
                   </div>
